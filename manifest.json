@@ -3,13 +3,13 @@
     "name": "Systembolaget Untappd Searcher",
     "version": "1.0",
     "description": "Searches Untappd for beers on the systembolaget page",
-    "permissions": [
-      "activeTab", 
-      "scripting"
-    ],
+    "permissions": ["activeTab", "scripting"],
     "host_permissions": [
-      "https://www.systembolaget.se/produkt/ol*"
+      "https://www.systembolaget.se/*"
     ],
+    "background": {
+      "service_worker": "service-worker.js"
+    },
     "action": {
       "default_popup": "popup.html",
       "default_icon": {
@@ -18,12 +18,6 @@
         "128": "icon.png"
       }
     },
-    "content_scripts": [
-      {
-        "matches": ["https://www.systembolaget.se/produkt/ol*"],
-        "js": ["popup.js"]
-      }
-    ],
     "icons": {
       "16": "icon.png",
       "48": "icon.png",
