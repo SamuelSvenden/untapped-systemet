@@ -28,7 +28,7 @@ function addButtonToElement(element) {
       link.appendChild(button);
       element.appendChild(link);
     });
-  }, 50);
+  }, 500);
 }
 
 
