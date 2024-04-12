@@ -63,7 +63,7 @@ function addApkToElement(element) {
       p.append(apk.toFixed(2));
       element.appendChild(p);
     });
-  }, 50);
+  }, 500);
 }
 
 
