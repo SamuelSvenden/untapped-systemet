@@ -38,8 +38,13 @@ function addApkToElement(element) {
     console.log(elements.length);
 
     elements.forEach((element) => {
+      if (element.querySelector('.apkrate')) {
+        return;
+      }
 
-      const p = document.createElement("p");
+      const p = document.createElement("p"); 
+      p.classList.add('apkrate');
+      
       p.innerText = "APK: ";
 
       
@@ -55,9 +60,6 @@ function addApkToElement(element) {
 
       var apk = (element2*(element3/100))/element4;
       
-
-
-    
       p.append(apk.toFixed(2));
       element.appendChild(p);
     });
