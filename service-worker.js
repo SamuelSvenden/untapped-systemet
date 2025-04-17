@@ -10,11 +10,18 @@ function addButtonToElement(element) {
         return;
       }
 
+      // Create a container for both button and APK
+      const container = document.createElement("div");
+      container.style.display = 'flex';
+      container.style.alignItems = 'center';
+      container.style.gap = '10px';
+      container.classList.add('untappd-container');
+
       const button = document.createElement("button");
       button.innerText = "Search Untappd";
-      button.classList.add('css-zisg71');
+      button.classList.add('css-1traj2v');
       button.classList.add('untappd-search-button');
-      button.style.marginBottom = '10px';
+      button.style.marginBottom = '10px'; // Remove bottom margin since we're using gap
       
       button.onclick = (event) => {
         event.stopPropagation();
@@ -31,15 +38,15 @@ function addButtonToElement(element) {
       link.target = "_blank"; 
       
       link.appendChild(button);
-      element.appendChild(link);
+      container.appendChild(link);
+      element.appendChild(container);
     });
   }, 500);
 }
 
-
 function addApkToElement(element) {
   setTimeout(() => {
-    const elements = document.querySelectorAll('.css-gg4vpm');
+    const elements = document.querySelectorAll('.css-2114pf');
     console.log(elements.length);
 
     elements.forEach((element) => {
@@ -47,39 +54,51 @@ function addApkToElement(element) {
         return;
       }
 
-      // Create a container for button and APK text
-      const container = document.createElement("div");
-      container.style.display = 'flex';
-      container.style.alignItems = 'center';
-      container.style.gap = '10px';
-
       const p = document.createElement("p"); 
       p.classList.add('apkrate');
       p.style.margin = '0'; // Remove default margin
       
       p.innerText = "APK: ";
 
-      var element1 = element.querySelectorAll('.css-bbhn7t');
-      const innerHtmls = Array.from(element1).map(el => el.innerHTML);
-      var price = element.querySelector('.css-a2frwy')
+      // Find the volume and percentage elements
+      const volumeElement = element.querySelector('#stock_scrollcontainer > p:nth-child(2)');
+      const percentageElement = element.querySelector('#stock_scrollcontainer > p:nth-child(3)');
+      const priceElement = element.querySelector('.css-a2frwy');
 
-      var element2 = innerHtmls[1] ? parseFloat(innerHtmls[1].replace(',', '.')) : 0;
-      var element3 = innerHtmls[2] ? parseFloat(innerHtmls[2].replace(',', '.')) : 0;
-      var element4 = price ? parseFloat(price.innerText.replace(':', '.').replace('*', '')) : 0;
+      // Extract and parse values
+      const volumeText = volumeElement ? volumeElement.innerText : '';
+      const percentageText = percentageElement ? percentageElement.innerText : '';
+      const priceText = priceElement ? priceElement.innerText : '';
 
-      var apk = (element2*(element3/100))/element4;
+      // Parse values
+      const milliliters = volumeText ? parseFloat(volumeText.replace(' ml', '')) : 0;
+      const percentage = percentageText ? parseFloat(percentageText.replace(',', '.').replace(' % vol.', '')) : 0;
+      const price = priceText ? parseFloat(priceText.replace('*', '').replace(':', '.')) : 0;
+
+      console.log('Volume:', milliliters);
+      console.log('Percentage:', percentage);
+      console.log('Price:', price);
+
+      // Calculate APK
+      const apk = price > 0 ? (percentage * (milliliters / 100)) / price : 0;
       
       p.append(apk.toFixed(2));
       
-      // Add both elements to the container
+      // Find the existing container or create a new one
+      let container = element.querySelector('.untappd-container');
+      if (!container) {
+        container = document.createElement("div");
+        container.style.display = 'flex';
+        container.style.alignItems = 'center';
+        container.style.gap = '10px';
+        container.classList.add('untappd-container');
+        element.appendChild(container);
+      }
+      
       container.appendChild(p);
-      element.appendChild(container);
     });
   }, 500);
 }
-
-
-
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete' && tab && tab.url && !tab.url.includes('chrome://')) {
@@ -90,7 +109,6 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   }
 });
 
-/*
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete' && tab && tab.url && !tab.url.includes('chrome://')) {
     chrome.scripting.executeScript({
@@ -99,6 +117,5 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     });
   }
 });
-*/
 
 
