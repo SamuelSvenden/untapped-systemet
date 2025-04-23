@@ -7,7 +7,11 @@ function addButtonToElement(element) {
       // Check if this element already has an Untappd search button
       const existingButton = element.querySelector('.untappd-search-button');
       if (existingButton) {
-        return;
+        // Remove the existing button and its container
+        const existingContainer = element.querySelector('.untappd-container');
+        if (existingContainer) {
+          existingContainer.remove();
+        }
       }
 
       // Create a container for both button and APK
@@ -50,13 +54,15 @@ function addApkToElement(element) {
     console.log(elements.length);
 
     elements.forEach((element) => {
-      if (element.querySelector('.apkrate')) {
-        return;
+      // Check if this element already has an APK rate
+      const existingApk = element.querySelector('.apkrate');
+      if (existingApk) {
+        // Remove the existing APK rate
+        existingApk.remove();
       }
 
       const p = document.createElement("p"); 
       p.classList.add('apkrate');
-      p.style.margin = '0'; // Remove default margin
       
       p.innerText = "APK: ";
 
@@ -80,7 +86,7 @@ function addApkToElement(element) {
       console.log('Price:', price);
 
       // Calculate APK
-      const apk = price > 0 ? (percentage * (milliliters / 100)) / price : 0;
+      const apk = price > 0 ? (milliliters * (percentage / 100)) / price : 0;
       
       p.append(apk.toFixed(2));
       
